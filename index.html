@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smite 2 Randomiser</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smite 2 Randomiser</h1>
+            <p class="subtitle">Generate random gods and builds</p>
+        </header>
+
+        <!-- Filters Section -->
+        <section class="filters-section">
+            <h2>Filters</h2>
+
+            <div class="filter-group">
+                <h3>God Class</h3>
+                <div class="filter-buttons" id="classFilters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Assassin">Assassin</button>
+                    <button class="filter-btn" data-filter="Guardian">Guardian</button>
+                    <button class="filter-btn" data-filter="Hunter">Hunter</button>
+                    <button class="filter-btn" data-filter="Mage">Mage</button>
+                    <button class="filter-btn" data-filter="Warrior">Warrior</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h3>Pantheon</h3>
+                <div class="filter-buttons" id="pantheonFilters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Arthurian">Arthurian</button>
+                    <button class="filter-btn" data-filter="Celtic">Celtic</button>
+                    <button class="filter-btn" data-filter="Chinese">Chinese</button>
+                    <button class="filter-btn" data-filter="Egyptian">Egyptian</button>
+                    <button class="filter-btn" data-filter="Greek">Greek</button>
+                    <button class="filter-btn" data-filter="Hindu">Hindu</button>
+                    <button class="filter-btn" data-filter="Japanese">Japanese</button>
+                    <button class="filter-btn" data-filter="Korean">Korean</button>
+                    <button class="filter-btn" data-filter="Maya">Maya</button>
+                    <button class="filter-btn" data-filter="Norse">Norse</button>
+                    <button class="filter-btn" data-filter="Polynesian">Polynesian</button>
+                    <button class="filter-btn" data-filter="Roman">Roman</button>
+                    <button class="filter-btn" data-filter="Tales of Arabia">Arabian</button>
+                    <button class="filter-btn" data-filter="Voodoo">Voodoo</button>
+                    <button class="filter-btn" data-filter="Yoruba">Yoruba</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h3>Damage Type</h3>
+                <div class="filter-buttons" id="damageFilters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Physical">Physical</button>
+                    <button class="filter-btn" data-filter="Magical">Magical</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Options Section -->
+        <section class="options-section">
+            <h2>Options</h2>
+            <div class="options-grid">
+                <label class="option-item">
+                    <input type="checkbox" id="includeStarter" checked>
+                    <span>Include Starter Item</span>
+                </label>
+                <label class="option-item">
+                    <input type="checkbox" id="includeRelics" checked>
+                    <span>Include Relic</span>
+                </label>
+                <label class="option-item">
+                    <input type="number" id="rerollCount" value="3" min="0" max="10">
+                    <span>Rerolls Available</span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Randomise Button -->
+        <div class="randomise-section">
+            <button id="randomiseBtn" class="randomise-btn">Randomise!</button>
+        </div>
+
+        <!-- Results Section -->
+        <section class="results-section" id="results" style="display: none;">
+            <div class="reroll-counter">
+                <span>Rerolls: </span>
+                <span id="rerollsRemaining">3</span>
+            </div>
+
+            <!-- God Result -->
+            <div class="result-card god-card">
+                <h3>Your God</h3>
+                <div class="god-display">
+                    <div class="god-icon" id="godIcon"></div>
+                    <div class="god-info">
+                        <span class="god-name" id="godName">-</span>
+                        <span class="god-details" id="godDetails">-</span>
+                    </div>
+                    <button class="reroll-btn" data-target="god" title="Reroll God">&#x21bb;</button>
+                </div>
+            </div>
+
+            <!-- Build Result -->
+            <div class="result-card build-card">
+                <h3>Your Build</h3>
+
+                <!-- Starter -->
+                <div class="build-row" id="starterRow">
+                    <span class="build-label">Starter:</span>
+                    <div class="item-slot" id="starterSlot">
+                        <div class="item-icon"></div>
+                        <span class="item-name">-</span>
+                        <button class="reroll-btn" data-target="starter" title="Reroll Starter">&#x21bb;</button>
+                    </div>
+                </div>
+
+                <!-- Items -->
+                <div class="build-row">
+                    <span class="build-label">Items:</span>
+                    <div class="items-grid" id="itemsGrid">
+                        <!-- 6 item slots will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Relic -->
+                <div class="build-row" id="relicsRow">
+                    <span class="build-label">Relic:</span>
+                    <div class="item-slot" id="relicSlot">
+                        <div class="item-icon"></div>
+                        <span class="item-name">-</span>
+                        <button class="reroll-btn" data-target="relic" title="Reroll Relic">&#x21bb;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Data sourced from <a href="https://wiki.smite2.com" target="_blank">Smite 2 Wiki</a> and <a href="https://smitesource.com" target="_blank">SmiteSource</a></p>
+            <p>Not affiliated with Hi-Rez Studios</p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
