@@ -80,9 +80,23 @@
             </div>
         </section>
 
-        <!-- Randomise Button -->
+        <!-- God Selection Section -->
+        <section class="god-select-section">
+            <h2>Select God (Optional)</h2>
+            <div class="god-select-container">
+                <input type="text" id="godSearch" class="god-search" placeholder="Search for a god...">
+                <div class="god-dropdown" id="godDropdown"></div>
+                <div class="selected-god" id="selectedGod" style="display: none;">
+                    <span id="selectedGodName">None</span>
+                    <button id="clearGodBtn" class="clear-btn" title="Clear selection">&times;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Randomise Buttons -->
         <div class="randomise-section">
-            <button id="randomiseBtn" class="randomise-btn">Randomise!</button>
+            <button id="randomiseBtn" class="randomise-btn">Randomise All!</button>
+            <button id="randomiseBuildBtn" class="randomise-btn secondary" disabled>Randomise Build Only</button>
         </div>
 
         <!-- Results Section -->

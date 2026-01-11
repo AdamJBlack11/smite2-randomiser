@@ -147,10 +147,126 @@ section h2 {
     text-align: center;
 }
 
+/* God Selection */
+.god-select-section {
+    position: relative;
+}
+
+.god-select-container {
+    position: relative;
+    max-width: 400px;
+}
+
+.god-search {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.god-search:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.god-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 100;
+    display: none;
+}
+
+.god-dropdown.show {
+    display: block;
+}
+
+.god-dropdown-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.god-dropdown-item:hover {
+    background: var(--bg-card);
+}
+
+.god-dropdown-item img {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.god-dropdown-item .god-item-info {
+    flex: 1;
+}
+
+.god-dropdown-item .god-item-name {
+    font-weight: bold;
+}
+
+.god-dropdown-item .god-item-details {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.selected-god {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 2px solid var(--accent);
+}
+
+.selected-god #selectedGodName {
+    flex: 1;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.clear-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: var(--border-color);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.clear-btn:hover {
+    background: var(--accent);
+}
+
 /* Randomise Button */
 .randomise-section {
     text-align: center;
     margin: 30px 0;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .randomise-btn {
@@ -173,6 +289,25 @@ section h2 {
 
 .randomise-btn:active {
     transform: translateY(0);
+}
+
+.randomise-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    box-shadow: none;
+}
+
+.randomise-btn.secondary:hover:not(:disabled) {
+    background: var(--accent);
+    color: white;
+}
+
+.randomise-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 /* Results Section */

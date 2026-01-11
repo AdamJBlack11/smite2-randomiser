@@ -125,16 +125,23 @@ let currentResult = {
     relic: null
 };
 let rerollsRemaining = 3;
+let selectedGod = null; // For manual god selection
 
 // DOM Elements
 const classFilters = document.getElementById('classFilters');
 const pantheonFilters = document.getElementById('pantheonFilters');
 const damageFilters = document.getElementById('damageFilters');
 const randomiseBtn = document.getElementById('randomiseBtn');
+const randomiseBuildBtn = document.getElementById('randomiseBuildBtn');
 const resultsSection = document.getElementById('results');
 const includeStarterCheckbox = document.getElementById('includeStarter');
 const includeRelicsCheckbox = document.getElementById('includeRelics');
 const rerollCountInput = document.getElementById('rerollCount');
+const godSearch = document.getElementById('godSearch');
+const godDropdown = document.getElementById('godDropdown');
+const selectedGodDiv = document.getElementById('selectedGod');
+const selectedGodName = document.getElementById('selectedGodName');
+const clearGodBtn = document.getElementById('clearGodBtn');
 
 // Load Data
 async function loadData() {
@@ -182,6 +189,85 @@ function setupFilterHandlers() {
 function updateFilterSelection(container, selectedBtn) {
     container.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     selectedBtn.classList.add('active');
+}
+
+// God Search Handlers
+function setupGodSearch() {
+    // Search input handler
+    godSearch.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length === 0) {
+            godDropdown.classList.remove('show');
+            return;
+        }
+
+        const filteredGods = godsData.gods.filter(god =>
+            god.name.toLowerCase().includes(query)
+        ).slice(0, 10); // Limit to 10 results
+
+        if (filteredGods.length > 0) {
+            renderGodDropdown(filteredGods);
+            godDropdown.classList.add('show');
+        } else {
+            godDropdown.classList.remove('show');
+        }
+    });
+
+    // Focus handler
+    godSearch.addEventListener('focus', () => {
+        if (godSearch.value.length > 0) {
+            godDropdown.classList.add('show');
+        }
+    });
+
+    // Click outside to close dropdown
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.god-select-container')) {
+            godDropdown.classList.remove('show');
+        }
+    });
+
+    // Clear button
+    clearGodBtn.addEventListener('click', clearGodSelection);
+}
+
+function renderGodDropdown(gods) {
+    godDropdown.innerHTML = gods.map(god => `
+        <div class="god-dropdown-item" data-god="${god.name}">
+            <img src="${getGodImageUrl(god.name)}" alt="${god.name}" onerror="this.style.display='none';">
+            <div class="god-item-info">
+                <div class="god-item-name">${god.name}</div>
+                <div class="god-item-details">${god.class} | ${god.pantheon}</div>
+            </div>
+        </div>
+    `).join('');
+
+    // Add click handlers
+    godDropdown.querySelectorAll('.god-dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const godName = item.dataset.god;
+            selectGod(godName);
+        });
+    });
+}
+
+function selectGod(godName) {
+    const god = godsData.gods.find(g => g.name === godName);
+    if (god) {
+        selectedGod = god;
+        selectedGodName.textContent = `${god.name} (${god.class} - ${god.damageType})`;
+        selectedGodDiv.style.display = 'flex';
+        godSearch.value = '';
+        godDropdown.classList.remove('show');
+        randomiseBuildBtn.disabled = false;
+    }
+}
+
+function clearGodSelection() {
+    selectedGod = null;
+    selectedGodDiv.style.display = 'none';
+    selectedGodName.textContent = 'None';
+    randomiseBuildBtn.disabled = true;
 }
 
 // Get Filtered Gods
@@ -273,7 +359,7 @@ function generateRelic() {
     return getRandomItem(itemsData.relics);
 }
 
-// Main Randomise Function
+// Main Randomise Function (randomises everything)
 function randomise() {
     const filteredGods = getFilteredGods();
 
@@ -285,7 +371,7 @@ function randomise() {
     // Reset rerolls
     rerollsRemaining = parseInt(rerollCountInput.value) || 3;
 
-    // Select random god
+    // Select random god (ignores manual selection)
     currentResult.god = getRandomItem(filteredGods);
 
     // Generate starter if enabled
@@ -300,6 +386,41 @@ function randomise() {
     currentResult.items = generateBuild(currentResult.god);
 
     // Generate relic if enabled (Smite 2 = 1 relic per match)
+    if (includeRelicsCheckbox.checked) {
+        currentResult.relic = generateRelic();
+    } else {
+        currentResult.relic = null;
+    }
+
+    // Display results
+    displayResults();
+}
+
+// Randomise Build Only (keeps selected god)
+function randomiseBuildOnly() {
+    if (!selectedGod) {
+        alert('Please select a god first.');
+        return;
+    }
+
+    // Reset rerolls
+    rerollsRemaining = parseInt(rerollCountInput.value) || 3;
+
+    // Use the selected god
+    currentResult.god = selectedGod;
+
+    // Generate starter if enabled
+    if (includeStarterCheckbox.checked) {
+        const starters = getStartersForGod(currentResult.god);
+        currentResult.starter = getRandomItem(starters);
+    } else {
+        currentResult.starter = null;
+    }
+
+    // Generate build
+    currentResult.items = generateBuild(currentResult.god);
+
+    // Generate relic if enabled
     if (includeRelicsCheckbox.checked) {
         currentResult.relic = generateRelic();
     } else {
@@ -512,9 +633,11 @@ function setupStaticRerollHandlers() {
 async function init() {
     await loadData();
     setupFilterHandlers();
+    setupGodSearch();
     setupStaticRerollHandlers();
 
     randomiseBtn.addEventListener('click', randomise);
+    randomiseBuildBtn.addEventListener('click', randomiseBuildOnly);
 
     console.log('Smite 2 Randomiser initialized');
 }
